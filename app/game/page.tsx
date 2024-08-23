@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useRouter } from 'next/navigation'
 import React, { useState, useEffect } from 'react';
@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { compareArtists, getInitialArtists, getRandomArtist, resetSeenArtists } from '@/app/actions/compareArtists';
 import { Artist } from '@/lib/types';
 import ArtistCard from '../components/ArtistCard';
-import { ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowUp, ArrowDown, Loader } from 'lucide-react';
 
 const Game: React.FC = () => {
     const [currentArtist, setCurrentArtist] = useState<Artist | null>(null);
@@ -14,14 +14,17 @@ const Game: React.FC = () => {
     const [score, setScore] = useState(0);
     const [isGameOver, setIsGameOver] = useState(false);
     const [isTransitioning, setIsTransitioning] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const router = useRouter();
 
     useEffect(() => {
         const fetchArtists = async () => {
+            setIsLoading(true);
             const [first, second] = await getInitialArtists();
             setCurrentArtist(first);
             setNextArtist(second);
+            setIsLoading(false);
         };
         fetchArtists();
     }, []);
@@ -44,6 +47,7 @@ const Game: React.FC = () => {
     };
 
     const resetGame = async () => {
+        setIsLoading(true);
         setScore(0);
         setIsGameOver(false);
         setIsTransitioning(true);
@@ -52,9 +56,41 @@ const Game: React.FC = () => {
         setCurrentArtist(first);
         setNextArtist(second);
         setIsTransitioning(false);
+        setIsLoading(false);
     };
 
-    if (!currentArtist || !nextArtist) return <div>Loading...</div>;
+    const loadingAnimation = {
+        animate: {
+            rotate: 360,
+            transition: {
+                duration: 1,
+                repeat: Infinity,
+                ease: "linear"
+            }
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-600 to-blue-500">
+                <motion.div
+                    animate={loadingAnimation.animate}
+                    className="text-white mb-4"
+                >
+                    <Loader size={48} />
+                </motion.div>
+                <p className="text-white text-xl">Loading awesome artists...</p>
+            </div>
+        );
+    }
+
+    if (!currentArtist || !nextArtist) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-600 to-blue-500">
+                <p className="text-white text-xl">Error loading artists. Please try again.</p>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col items-center justify-between min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 p-4 overflow-hidden">
@@ -99,8 +135,10 @@ const Game: React.FC = () => {
                                     transition={{ type: 'spring', stiffness: 80, damping: 20 }}
                                     className="w-full md:w-5/12 mt-4 md:mt-0"
                                 >
-                                    <ArtistCard artist={nextArtist} />
-                                    <div className="mt-2 text-center text-white">
+                                    <ArtistCard artist={nextArtist} 
+                                    
+                                    />
+                                     <div className="mt-2 text-center text-white">
                                         <p className="text-lg sm:text-2xl font-bold">{nextArtist.name} has</p>
                                         <div className="flex justify-center space-x-4 mt-2">
                                             <button
@@ -138,9 +176,17 @@ const Game: React.FC = () => {
                             <div className="flex justify-center space-x-4">
                                 <button
                                     onClick={resetGame}
-                                    className="bg-white text-purple-600 font-bold py-2 px-4 rounded hover:bg-gray-100 transition-colors"
+                                    disabled={isLoading}
+                                    className="bg-white text-purple-600 font-bold py-2 px-4 rounded hover:bg-gray-100 transition-colors disabled:opacity-50 flex items-center"
                                 >
-                                    Play Again
+                                    {isLoading ? (
+                                        <>
+                                            <Loader size={20} className="animate-spin mr-2" />
+                                            Loading...
+                                        </>
+                                    ) : (
+                                        'Play Again'
+                                    )}
                                 </button>
                                 <button
                                     onClick={() => router.push('/')}
