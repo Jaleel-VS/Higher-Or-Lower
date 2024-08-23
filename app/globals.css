@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:/* In your global CSS or as a Tailwind utility */
+.vertical-line {
+    width: 2px;
+    background-color: white;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.horizontal-line {
+    height: 2px;
+    background-color: white;
+    width: 100%;
+    margin: 0 auto;
+}
