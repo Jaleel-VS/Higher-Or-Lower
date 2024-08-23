@@ -5,9 +5,9 @@ import ReactCountryFlag from "react-country-flag"
 
 const ArtistCard: React.FC<{ artist: Artist }> = ({ artist }) => (
     <div className="flex flex-col items-center p-1 bg-transparent rounded-lg">
-        <h2 className="text-lg sm:text-xl text-white font-bold truncate w-full text-center">
+        {/* <h2 className="text-lg sm:text-xl text-white font-bold truncate w-full text-center">
             {artist.name}
-        </h2>
+        </h2> */}
         {/* <div className="relative w-96 h-96 sm:w-32 sm:h-32 mb-2"> */}
         <Image
             src={artist.imageUrl}
