@@ -1,34 +1,35 @@
 'use client'
  
 import { useRouter } from 'next/navigation'
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Music, Youtube, Twitch, Instagram } from 'lucide-react';
+import { Music, Youtube, Twitch, Instagram, LucideIcon } from 'lucide-react';
 
-const GameTypes = [
+interface GameType {
+  name: string;
+  icon: LucideIcon;
+  enabled: boolean;
+}
+
+const GameTypes: GameType[] = [
   { name: 'Spotify Top Monthly', icon: Music, enabled: true },
   { name: 'YouTube Top Artists', icon: Youtube, enabled: false },
   { name: 'Twitch Streamers', icon: Twitch, enabled: false },
   { name: 'Instagram Followers', icon: Instagram, enabled: false },
 ];
 
-
-const GameSelectionMenu = ({ onGameStart }) => {
-  const [selectedGame, setSelectedGame] = useState(null);
+const GameSelectionMenu: React.FC = () => {
+  const [selectedGame, setSelectedGame] = useState<GameType | null>(null);
   
   const router = useRouter()
 
-  const handleGameSelect = (game) => {
+  const handleGameSelect = (game: GameType) => {
     setSelectedGame(game);
     console.log(game.name)
     if (game.name === 'Spotify Top Monthly') {
       router.push('/game')
     }
-    
   };
-
-
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 p-4">
