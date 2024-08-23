@@ -16,7 +16,7 @@ const ArtistCard: React.FC<{ artist: Artist }> = ({ artist }) => (
             height={300}
             // layout="fill" 
             // sizes="(max-width: 640px) 75vw, (max-width: 1024px) 50vw, 25vw"
-            className="rounded-md relative w-52 h-52 sm:w-80 sm:h-80 md:w-64 md:h-64 mb-2"
+            className="rounded-md relative w-44 h-44 sm:w-80 sm:h-80 md:w-64 md:h-64 mb-2"
         />
         {/* </div> */}
 

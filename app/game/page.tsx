@@ -199,7 +199,7 @@ const Game: React.FC = () => {
                     )}
                 </AnimatePresence>
             </div>
-            <div className="mt-4 text-xl sm:text-2xl font-bold text-white">Score: {score}</div>
+            <div className="mt-2 text-xl sm:text-2xl font-bold text-white">Score: {score}</div>
         </div>
     );
 };
